@@ -1,0 +1,61 @@
+Ejercicio 1
+
+Dado las 3 tablas siguientes en una base de datos:
+
+1.-Catalogo de productos (CatArt.csv)
+2.-Catalogo de productos promocionales (Promos.csv)
+3.-Compras realizadas (compras.csv)
+
+Realice la exploración de la información en los archivos y escriba la consulta para extraer 
+la información de los 7 articulos más comprados del catálogo de productos promocionales 
+por cada cliente de acuerdo a las siguientes restricciones.
+
+- Si el cliente no compró ningún articulo promocional deberá tomar el top 7 de productos promocionales
+más vendidos.
+
+- Si el cliente compró menos de 7 productos promocionales, los productos restantes deberán
+tomarse de los articulos de productos promocionales que esten relacionados de acuerdo
+a su clasificación con los comprados por el cliente.
+
+- Si el ciente compró menos de 7 productos promocionales y los productos relacionados por su
+clasificación no alcanzarán los 7 productos se debera tomar lo restante del top 7 de articulos
+mas vendidos para complementarlos.
+
+- El Layout final deberá contener las columnas de cliente y producto en orden de más comprado
+de la siguiente forma:
+
+  id_cliente
+  id_art1
+  id_art2
+  id_art3
+  id_art4
+  id_art5
+  id_art6
+  id_art7
+
+Notas adicionales. 
+- La consulta puede dividirse en cuantos casos considere necesario (puede generar más de una consulta).
+- No es necesario completar todos los casos, pero si señalar que caso o casos resuelve sus consultas.
+- No es necesario hacer la carga de la información, pero puede realizarlo si necesita realizar pruebas.
+- En caso de realizar cargas adjuntar pantallas de las pruebas.
+- El entregable es la consulta o consultas resultantes, pero se dará un peso extra si muestra pantallas de pruebas.
+
+
+
+
+Ejercicio 2
+
+Describa los pasos para cargar la información de los archivos de CSV antes mencionados
+hacia una base de datos que usted eliga en alguna Herramienta ETL que haya utilizado.
+
+Si tiene la posibilidad de realizar la carga usando la herramienta favor de adjuntar pantallas.
+
+
+
+Ejercicio 3
+
+Suponga que los archivos csv se encuentran en tres tablas de una BD Teradata cuya configuración
+es por odbc, escriba el codigo en python para conectarse a la base y obtener la información 
+de compras y CatArt, convierta la información en un Dataframe y realicé un cruce a  nivel Dataframe
+para obtener las clasificaciones a las que pertenecen los articulos comprados, 
+finalmente el dataframe resultante deberá ser almacenado en un archivo csv.

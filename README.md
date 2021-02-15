@@ -496,7 +496,7 @@ def selectAndShowTables(conn):
         print(i)     
 ```
 
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_2.png" width="455" height="742">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_2.png" width="1920" height="1080">
 
 ## Question 3
 
@@ -530,8 +530,8 @@ def datasetsToSqlToCsv():
     
 datasetsToSqlToCsv()
 ```
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_1.png" width="455" height="742">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_1.png" width="1920" height="1080">
 
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_2.png" width="455" height="742">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_2.png" width="1920" height="1080">
 
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_3.png" width="455" height="742">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_3.png" width="1920" height="1080">

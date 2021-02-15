@@ -4,6 +4,7 @@ The following README file has the answers to the technical exam to be part of Wa
 In the first section I add all the queries, views, procedures and analysis made to answer the first exercise.
 Then I add fragments of the script used to test ETL functions with python and pandas library, as you can see I attach the files in this repository.
 Finally I add a final script to test and inner join with DataFrames.
+In order to accomplish the test requirements I also attach in this repoitory a .csv file called "final.csv" where the answer to the last exercise is to be found.
 
 ## Question 1
 

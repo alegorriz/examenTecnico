@@ -4,122 +4,305 @@
 
 You can see the separate querys in the next section:
 
-    - CLIENTS PROMO SUBSET (1290)
-    - CLIENTS WITHOUT PROMO SUBSET (647)
-    - TOP OF NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION (737)
-    - TOP OF NON-PROMOTIONAL PURCHASES WITH DIFFERENT CLASIFICATION (834)
-    - TOP OF PROMOTIONAL PURCHASES(2265)
+    * CLIENTS WHO BOUGHT PROMOS (1290 rows)
+    * CLIENTS WHO DIDN'T BOUGHT PROMOS (647 rows)
+    * NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION AS PROMOTIONAL ARTICLES (EXCLUDING CLIENTES WHO DIDN'T BOUGHT PROMOS) (424 rows)
+    * PROMOTIONAL PURCHASES (2265 rows)
+    * TOP 7 MOST PURCHASED ARTICLES
+    * TOP 7 MOST PURCHASED PROMOTIONAL ARTICLES
 
-### CLIENTS PROMO SUBSET (1290)
+As you can see in the next image, a view was created for each one of the listed points, followed by the queries used for each:
 
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/dbDiagram.png" width="455" height="742">
+
+### CLIENTS WHO BOUGHT PROMOS (1290 rows)
 ```sh
---SUBCONJUNTO CLIENTES PROMO (1290):
-
-SELECT DISTINCT(c.id_cte)
-FROM compras c, promos p
-WHERE c.id_art=p.id_art;
+        CREATE VIEW cliente_promo(id_cte)
+        AS
+        SELECT DISTINCT(c.id_cte)
+        FROM compras c, promos p
+        WHERE c.id_art=p.id_art;
 ```
-
-### CLIENTS WITHOUT PROMO SUBSET (647)
-
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/cliente_promo.png" width=“455” height=“742”>
+### CLIENTS WHO DIDN'T BOUGHT PROMOS (647 rows)
 ```sh
---SUBCONJUNTO CLIENTES SIN PROMO (647):   [USO DE 2]
-
-SELECT DISTINCT(id_cte)
-FROM compras
-WHERE id_cte
-NOT IN(
-    SELECT DISTINCT(c.id_cte)
-    FROM compras c, promos p
-    WHERE c.id_art=p.id_art
-);
+        CREATE VIEW cliente_nopromo(id_cte)
+        AS
+        SELECT DISTINCT(id_cte)
+        FROM compras
+        WHERE id_cte
+        NOT IN(
+            SELECT DISTINCT(c.id_cte)
+            FROM compras c, promos p
+            WHERE c.id_art=p.id_art
+        );
 ```
-
-### TOP OF NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION (737)
-
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/cliente_nopromo.png" width=“455” height=“742”>
+### NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION AS PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN'T BOUGHT PROMOS) (424 rows)
 ```sh
---TOP COMPRAS NO PROMOCIONALES CON MISMA CLASIFICACION (737)
-
-SELECT c.id_cte, c.id_art, COUNT(c.id_art)
-FROM compras c, catArt a
-WHERE c.id_art = a.id_art
-AND a.id_art
-NOT IN(
-    SELECT DISTINCT(id_art)
-    FROM promos
-)AND a.id_clasif
-IN(
-    SELECT DISTINCT(a.id_clasif)
-    FROM catArt a, promos p
-    WHERE a.id_art = p.id_art
-)GROUP BY c.id_cte, c.id_art
-ORDER BY c.id_cte, COUNT(c.id_art);
+        CREATE VIEW compras_no_promoxcte(id_cte, id_art, n_art)
+        AS
+        SELECT c.id_cte, c.id_art, COUNT(c.id_art)
+        FROM compras c, catArt a
+        WHERE c.id_art = a.id_art
+        AND a.id_art
+        NOT IN(
+            SELECT DISTINCT(id_art)
+            FROM promos
+        ) AND a.id_clasif
+        IN(
+            SELECT DISTINCT(a.id_clasif)
+            FROM catArt a, promos p
+            WHERE a.id_art = p.id_art
+        ) AND c.id_cte
+        IN(
+            SELECT DISTINCT(c.id_cte)
+            FROM compras c, promos p
+            WHERE c.id_art=p.id_art
+        ) GROUP BY c.id_cte, c.id_art
+        ORDER BY c.id_cte, COUNT(c.id_art) DESC;
 ```
-
-### TOP OF NON-PROMOTIONAL PURCHASES WITH DIFFERENT CLASIFICATION (834)
-
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/compras_no_promoxcte.png" width=“455” height=“742”>
+### PROMOTIONAL PURCHASES (2265 rows)
 ```sh
---TOP COMPRAS NO PROMOCIONALES CON DISTINTA CLASIFICACION (834)
-
-SELECT c.id_cte, c.id_art, COUNT(c.id_art)
-FROM compras c, catArt a
-WHERE c.id_art = a.id_art
-AND a.id_art
-NOT IN(
-    SELECT DISTINCT(id_art)
-    FROM promos
-)AND a.id_clasif
-NOT IN(
-    SELECT DISTINCT(a.id_clasif)
-    FROM catArt a, promos p
-    WHERE a.id_art = p.id_art
-)GROUP BY c.id_cte, c.id_art
-ORDER BY c.id_cte, COUNT(c.id_art);
+        CREATE VIEW compras_promoxcte(id_cte, id_art, n_art)
+        AS
+        SELECT c.id_cte, c.id_art, COUNT(c.id_art)
+        FROM compras c, catArt a
+        WHERE a.id_art = c.id_art
+        AND a.id_art
+        IN(
+            SELECT DISTINCT(id_art)
+            FROM promos
+        ) AND c.id_cte
+        IN(
+            SELECT DISTINCT(c.id_cte)
+            FROM compras c, promos p
+            WHERE c.id_art=p.id_art
+        ) GROUP BY c.id_cte, c.id_art
+        ORDER BY c.id_cte, COUNT(c.id_art) DESC;
 ```
-
-### TOP OF PROMOTIONAL PURCHASES(2265)
-
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/compras_promoxcte.png" width=“455” height=“742”>
+### TOP 7 MOST PURCHASED ARTICLES
 ```sh
---TOP COMPRAS PROMOCIONALES (2265)
-
-SELECT c.id_cte, c.id_art, COUNT(c.id_art)
-FROM compras c, catArt a
-WHERE a.id_art = c.id_art
-AND a.id_art
-IN(
-    SELECT DISTINCT(id_art)
-    FROM promos
-)GROUP BY c.id_cte, c.id_art
-ORDER BY c.id_cte, COUNT(c.id_art);
+        CREATE VIEW TOP7T(id_art, n_art)
+        AS
+        SELECT id_art, COUNT(id_art)
+        FROM compras
+        GROUP BY id_art
+        ORDER BY COUNT(id_art) DESC
+        LIMIT 7;
 ```
-
-### TABLE WITH TOTAL (3836)
-
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/TOP7T.png" width=“455” height=“742”>
+### TOP 7 MOST PURCHASED PROMOTIONAL ARTICLES
 ```sh
--- TABLA DE TOP TOTAL (3836) (AQUI FALTA EL LIMIT PARA QUE SEAN SOLO 7)
-
-SELECT id_cte, id_art, COUNT(id_art)
-FROM compras
-GROUP BY id_cte, id_art
-ORDER BY id_cte, COUNT(id_art);
+        CREATE VIEW TOP7P(id_art, n_art)
+        AS
+        SELECT id_art, COUNT(id_art)
+        FROM compras
+        WHERE id_art
+        IN(
+            SELECT DISTINCT(id_art)
+            FROM promos
+        ) GROUP BY id_art
+        ORDER BY COUNT(id_art) DESC
+        LIMIT 7;
 ```
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/TOP7P.png" width=“455” height=“742”>
+In order to be sure that all sets were complete and the views weren't missing data, I executed the following queries and analysis:
+### NON-PROMOTIONAL PURCHASES WITH DISTINCT CLASIFICACION FROM PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN'T BOUGHT PROMOS) (500 rows)
+```sh
+    SELECT c.id_cte, c.id_art, COUNT(c.id_art)
+    FROM compras c, catArt a
+    WHERE c.id_art = a.id_art
+    AND a.id_art
+    NOT IN(
+        SELECT DISTINCT(id_art)
+        FROM promos
+    ) AND a.id_clasif
+    NOT IN(
+        SELECT DISTINCT(a.id_clasif)
+        FROM catArt a, promos p
+        WHERE a.id_art = p.id_art
+    ) AND c.id_cte
+    IN(
+        SELECT DISTINCT(c.id_cte)
+        FROM compras c, promos p
+        WHERE c.id_art=p.id_art
+    ) GROUP BY c.id_cte, c.id_art;
+```
+### TOTAL PURCHASES (EXCLUDING CLIENTS WHO DIDN'T BOUGHT PROMOS) (3189 rows)
+```sh
+    SELECT id_cte, id_art, COUNT(id_art)
+    FROM compras
+    WHERE id_cte
+    IN(
+        SELECT DISTINCT(c.id_cte)
+        FROM compras c, promos p
+        WHERE c.id_art=p.id_art
+    ) GROUP BY id_cte, id_art;
+```
+### TOTAL PURCHASES (EXCLUDING CLIENTS WHO BOUGHT PROMOS) (647 rows)
+```sh
+    SELECT id_cte, id_art, COUNT(id_art)
+    FROM compras
+    WHERE id_cte
+    NOT IN(
+        SELECT DISTINCT(c.id_cte)
+        FROM compras c, promos p
+        WHERE c.id_art=p.id_art
+    )
+    GROUP BY id_cte, id_art;
+```
+### TOTAL PURCHASES WITH ALL CLIENTS (3836 rows)
+```sh
+    SELECT id_cte, id_art, COUNT(id_art)
+    FROM compras
+    GROUP BY id_cte, id_art;
+```
+### TOTAL CLIENTS (1937 rows)
+```sh
+    SELECT DISTINCT(id_cte) FROM compras;
+```
+Here a variable will be assigned to each set so we can picture the analysis clearly:
+   
+* CLIENTS WHO BOUGHT PROMOS (1290 rows) => A
+* CLIENTS WHO DIDN'T BOUGHT PROMOS (647 rows) => B
+* TOTAL CLIENTS (1937 rows) => C
+C = A + B
+* NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION AS PROMOTIONAL ARTICLES (EXCLUDING CLIENTES WHO DIDN'T BOUGHT PROMOS) (424 rows) => A
+* NON-PROMOTIONAL PURCHASES WITH DISTINCT CLASIFICACION FROM PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (500 rows) => B
+* PROMOTIONAL PURCHASES (2265 rows) => C
+* TOTAL PURCHASES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (3189 rows) => D
+D = A + B + C
+* TOTAL PURCHASES (EXCLUDING CLIENTS WHO BOUGHT PROMOS) (647 rows) => E
+* TOTAL PURCHASES WITH ALL CLIENTS (3836 rows) => F
+F = D + E
 
+As we can appreciate, all the sets complement each other, so we are not missing data from the created views.
 
+Now that we have the required subsets for the analysis, we proceed to create the desired result set, for which I created
+the following table, in which the result set will be inserted:
+```sh
+    CREATE TABLE prueba_tfinal
+    (id_cte VARCHAR(10),
+    id_art INT,
+    n_art INT,
+    PRIMARY KEY(id_cte, id_art));
+```
+I created a composed primary key, to be sure that the combination of client and article will not be repeated.
+Finally, the procedures created to get the desired result set are:
+*   insert_ctepromo_p
+*   call_insert_cnp
+*   call_insert_cp
 
+I proceed to list them:
+### insert_ctepromo_p
+```sh
+    delimiter //
+    create procedure insert_ctepromo_p(
+        IN id_entrada VARCHAR(10)
+    )
+    BEGIN
+        DECLARE cte_count, cte_count2, count_cuenta, complemento, var_iter, i, dummy INT DEFAULT 0;
+        SELECT COUNT(*) FROM compras_promoxcte WHERE id_cte = id_entrada INTO cte_count;
+        INSERT INTO prueba_tfinal (id_cte, id_art, n_art)
+        SELECT id_cte, id_art, n_art
+        FROM compras_promoxcte
+        WHERE id_cte = id_entrada
+        LIMIT 7;
+        
+        IF cte_count < 8 THEN
+            SELECT COUNT(*) FROM compras_no_promoxcte WHERE id_cte = id_entrada INTO cte_count2;
+            SELECT cte_count + cte_count2 INTO count_cuenta;
+    
+            IF count_cuenta > 7 THEN
+                SELECT 7 - cte_count INTO complemento;
+                INSERT INTO prueba_tfinal (id_cte, id_art, n_art)
+                SELECT id_cte, id_art, n_art
+                FROM compras_no_promoxcte
+                WHERE id_cte = id_entrada
+                LIMIT 7;
+            ELSEIF count_cuenta < 8 THEN
+                INSERT INTO prueba_tfinal (id_cte, id_art, n_art)
+                SELECT id_cte, id_art, n_art
+                FROM compras_no_promoxcte
+                WHERE id_cte = id_entrada
+                LIMIT 7;
+                SELECT 7 - count_cuenta INTO var_iter;
+                IF var_iter > 0 THEN
+                    WHILE i < var_iter DO
+                        SELECT id_art
+                        FROM TOP7T
+                        WHERE id_art
+                        NOT IN(
+                            SELECT id_art
+                            FROM prueba_tfinal
+                            WHERE id_cte = id_entrada
+                        )LIMIT 1 INTO dummy;
+                        INSERT INTO prueba_tfinal (id_cte, id_art, n_art)
+                        VALUES (id_entrada,
+                        dummy, 1);
+                        SELECT i + 1 INTO i;
+                    END WHILE;
+                END IF;
+            END IF;
+        END IF;
+    end; //
+```
+### call_insert_cnp
+```sh
+    delimiter //
+    create procedure p_call_insert_cnp()
+    BEGIN
+        DECLARE i, j, n INT DEFAULT 0;
+        DECLARE dummy VARCHAR(10);
+        SELECT COUNT(*) FROM cliente_nopromo INTO n;
+        
+        WHILE i<n DO 
+            SELECT * FROM cliente_nopromo LIMIT i,1 INTO dummy;
+            SET j = 0;
+            WHILE j<7 DO
+                INSERT INTO prueba_tfinal (id_cte, id_art, n_art)
+                VALUES(dummy,
+                (SELECT id_art FROM TOP7P LIMIT j,1),
+                1);
+                SELECT j + 1 INTO j;
+            END WHILE;
+            SELECT i + 1 INTO i;
+        END WHILE;
+    END; //
+```
+### call_insert_cp
+```sh
+    delimiter //
+    create procedure p_call_insert_cp()
+    BEGIN
+        DECLARE i, n INT DEFAULT 0;
+        DECLARE dummy VARCHAR(10);
+        SELECT COUNT(*) FROM cliente_promo INTO n;
+        
+        WHILE i<n DO 
+            SELECT * FROM cliente_promo LIMIT i,1 INTO dummy;
+            CALL insert_ctepromo_p(dummy);
+            SELECT i + 1 INTO i;
+        END WHILE;
+    END; //
+```
 ## Question 2
 
 The steps for loading data from .csv into a database are:
 
-    - Create de database in the system
-    - Stablish a connection with some vendor of database with it's connector (in this case I used MySql
-    - With the connection object of the last step create a connector object and select the database in order to excecute queries over the data base
-    - Use the connector object to create the tables into the database passing as arguments the "create table" sql sentence (notice that I have created the relationships between the tables).
-    - In this step I load all the data from the .csv files into the tables that I have created in the last step, running the "INSER INTO" sql setence into a for loop for each table.
-    - As last step I put all together in python functions and to prove that the data was created I execute a "SELECT *" sql sentence over the three tables.
+* Create de database in the system.
+* Stablish a connection with some vendor of database with it's connector (in this case I used MySql).
+* With the connection object of the last step create a connector object and select the database in order to excecute queries over the data base.
+* Use the connector object to create the tables into the database passing as arguments the "create table" sql sentence (notice that I have created the relationships between the tables).
+* In this step I load all the data from the .csv files into the tables that I have created in the last step, running the "INSER INTO" sql setence into a for loop for each table.
+* As last step I put all together in python functions and to prove that the data was created I execute a "SELECT *" sql sentence over the three tables.
     
-Finally I attach you the code with some documentation and some images:
+Finally I attach the code with some documentation and some images:
 
-You can see te ETL function in the next section:
+You can see te ETL functions in the next section:
 
     - Execute ETL Function
     - Create Tables Function
@@ -306,7 +489,7 @@ def datasetsToSqlToCsv():
             dataFrameCompras = pd.DataFrame(SQL_Query_compras, columns=['id_cte', 'id_art'])
             print(dataFrameCompras)
             
-            dataFrameOutset = pd.merge(dataFrameCarArt, dataFrameCompras, on='id_art', how='outer')
+            dataFrameOutset = pd.merge(dataFrameCarArt, dataFrameCompras, on='id_art', how='inner')
            
             dataFrameOutset.to_csv('{YourPath}')
     except Error as e:
@@ -314,18 +497,3 @@ def datasetsToSqlToCsv():
     
 datasetsToSqlToCsv()
 ```
-
-
-
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/dbDiagram.png" width="100" height="100">
-
-
-
-
-
-
-
-
-
-
-

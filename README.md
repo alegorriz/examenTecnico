@@ -316,9 +316,9 @@ I proceed to list them:
         END WHILE;
     END; //
 ```
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_1.png" width="455" height="742">
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_2.png" width="455" height="742">
-<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_3.png" width="455" height="742">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_1.png" width="186" height="963">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_2.png" width="186" height="963">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_3.png" width="186" height="963">
 
 ## Question 2
 

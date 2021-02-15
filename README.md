@@ -316,6 +316,10 @@ I proceed to list them:
         END WHILE;
     END; //
 ```
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_1.png" width="455" height="742">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_2.png" width="455" height="742">
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/salida_3.png" width="455" height="742">
+
 ## Question 2
 
 The steps for loading data from .csv into a database are:
@@ -492,6 +496,8 @@ def selectAndShowTables(conn):
         print(i)     
 ```
 
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_2.png" width="455" height="742">
+
 ## Question 3
 
 ```sh
@@ -524,3 +530,8 @@ def datasetsToSqlToCsv():
     
 datasetsToSqlToCsv()
 ```
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_1.png" width="455" height="742">
+
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_2.png" width="455" height="742">
+
+<img src="https://github.com/alegorriz/examenTecnico/blob/main/image/punto_3_3.png" width="455" height="742">

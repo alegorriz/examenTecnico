@@ -196,15 +196,15 @@ Here a variable will be assigned to each set so we can picture the analysis clea
    * CLIENTS WHO BOUGHT PROMOS (1290 rows) => A
    * CLIENTS WHO DIDN'T BOUGHT PROMOS (647 rows) => B
    * TOTAL CLIENTS (1937 rows) => C
-      C = A + B
+      * C = A + B
    * NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION AS PROMOTIONAL ARTICLES (EXCLUDING CLIENTES WHO DIDN'T BOUGHT PROMOS) (424 rows) => A
    * NON-PROMOTIONAL PURCHASES WITH DISTINCT CLASIFICACION FROM PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (500 rows) => B
    * PROMOTIONAL PURCHASES (2265 rows) => C
    * TOTAL PURCHASES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (3189 rows) => D
-      D = A + B + C
+      * D = A + B + C
    * TOTAL PURCHASES (EXCLUDING CLIENTS WHO BOUGHT PROMOS) (647 rows) => E
    * TOTAL PURCHASES WITH ALL CLIENTS (3836 rows) => F
-      F = D + E
+      * F = D + E
 
 As we can appreciate, all the sets complement each other, so we are not missing data from the created views.
 

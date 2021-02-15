@@ -24,7 +24,9 @@ As you can see in the next image, a view was created for each one of the listed 
         WHERE c.id_art=p.id_art;
 ```
 <img src="https://github.com/alegorriz/examenTecnico/blob/main/image/cliente_promo.png" width=“455” height=“742”>
+
 ### CLIENTS WHO DIDN'T BOUGHT PROMOS (647 rows)
+
 ```sh
         CREATE VIEW cliente_nopromo(id_cte)
         AS
@@ -37,8 +39,11 @@ As you can see in the next image, a view was created for each one of the listed 
             WHERE c.id_art=p.id_art
         );
 ```
+
 <img src="https://github.com/alegorriz/examenTecnico/blob/main/image/cliente_nopromo.png" width=“455” height=“742”>
+
 ### NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION AS PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN'T BOUGHT PROMOS) (424 rows)
+
 ```sh
         CREATE VIEW compras_no_promoxcte(id_cte, id_art, n_art)
         AS
@@ -62,8 +67,11 @@ As you can see in the next image, a view was created for each one of the listed 
         ) GROUP BY c.id_cte, c.id_art
         ORDER BY c.id_cte, COUNT(c.id_art) DESC;
 ```
+
 <img src="https://github.com/alegorriz/examenTecnico/blob/main/image/compras_no_promoxcte.png" width=“455” height=“742”>
+
 ### PROMOTIONAL PURCHASES (2265 rows)
+
 ```sh
         CREATE VIEW compras_promoxcte(id_cte, id_art, n_art)
         AS
@@ -82,8 +90,11 @@ As you can see in the next image, a view was created for each one of the listed 
         ) GROUP BY c.id_cte, c.id_art
         ORDER BY c.id_cte, COUNT(c.id_art) DESC;
 ```
+
 <img src="https://github.com/alegorriz/examenTecnico/blob/main/image/compras_promoxcte.png" width=“455” height=“742”>
+
 ### TOP 7 MOST PURCHASED ARTICLES
+
 ```sh
         CREATE VIEW TOP7T(id_art, n_art)
         AS
@@ -93,8 +104,11 @@ As you can see in the next image, a view was created for each one of the listed 
         ORDER BY COUNT(id_art) DESC
         LIMIT 7;
 ```
+
 <img src="https://github.com/alegorriz/examenTecnico/blob/main/image/TOP7T.png" width=“455” height=“742”>
+
 ### TOP 7 MOST PURCHASED PROMOTIONAL ARTICLES
+
 ```sh
         CREATE VIEW TOP7P(id_art, n_art)
         AS
@@ -108,9 +122,13 @@ As you can see in the next image, a view was created for each one of the listed 
         ORDER BY COUNT(id_art) DESC
         LIMIT 7;
 ```
+
 <img src="https://github.com/alegorriz/examenTecnico/blob/main/image/TOP7P.png" width=“455” height=“742”>
+
 In order to be sure that all sets were complete and the views weren't missing data, I executed the following queries and analysis:
+
 ### NON-PROMOTIONAL PURCHASES WITH DISTINCT CLASIFICACION FROM PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN'T BOUGHT PROMOS) (500 rows)
+
 ```sh
     SELECT c.id_cte, c.id_art, COUNT(c.id_art)
     FROM compras c, catArt a
@@ -131,7 +149,9 @@ In order to be sure that all sets were complete and the views weren't missing da
         WHERE c.id_art=p.id_art
     ) GROUP BY c.id_cte, c.id_art;
 ```
+
 ### TOTAL PURCHASES (EXCLUDING CLIENTS WHO DIDN'T BOUGHT PROMOS) (3189 rows)
+
 ```sh
     SELECT id_cte, id_art, COUNT(id_art)
     FROM compras
@@ -142,7 +162,9 @@ In order to be sure that all sets were complete and the views weren't missing da
         WHERE c.id_art=p.id_art
     ) GROUP BY id_cte, id_art;
 ```
+
 ### TOTAL PURCHASES (EXCLUDING CLIENTS WHO BOUGHT PROMOS) (647 rows)
+
 ```sh
     SELECT id_cte, id_art, COUNT(id_art)
     FROM compras
@@ -154,30 +176,35 @@ In order to be sure that all sets were complete and the views weren't missing da
     )
     GROUP BY id_cte, id_art;
 ```
+
 ### TOTAL PURCHASES WITH ALL CLIENTS (3836 rows)
+
 ```sh
     SELECT id_cte, id_art, COUNT(id_art)
     FROM compras
     GROUP BY id_cte, id_art;
 ```
+
 ### TOTAL CLIENTS (1937 rows)
+
 ```sh
     SELECT DISTINCT(id_cte) FROM compras;
 ```
+
 Here a variable will be assigned to each set so we can picture the analysis clearly:
    
-* CLIENTS WHO BOUGHT PROMOS (1290 rows) => A
-* CLIENTS WHO DIDN'T BOUGHT PROMOS (647 rows) => B
-* TOTAL CLIENTS (1937 rows) => C
-C = A + B
-* NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION AS PROMOTIONAL ARTICLES (EXCLUDING CLIENTES WHO DIDN'T BOUGHT PROMOS) (424 rows) => A
-* NON-PROMOTIONAL PURCHASES WITH DISTINCT CLASIFICACION FROM PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (500 rows) => B
-* PROMOTIONAL PURCHASES (2265 rows) => C
-* TOTAL PURCHASES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (3189 rows) => D
-D = A + B + C
-* TOTAL PURCHASES (EXCLUDING CLIENTS WHO BOUGHT PROMOS) (647 rows) => E
-* TOTAL PURCHASES WITH ALL CLIENTS (3836 rows) => F
-F = D + E
+   * CLIENTS WHO BOUGHT PROMOS (1290 rows) => A
+   * CLIENTS WHO DIDN'T BOUGHT PROMOS (647 rows) => B
+   * TOTAL CLIENTS (1937 rows) => C
+      C = A + B
+   * NON-PROMOTIONAL PURCHASES WITH SAME CLASIFICATION AS PROMOTIONAL ARTICLES (EXCLUDING CLIENTES WHO DIDN'T BOUGHT PROMOS) (424 rows) => A
+   * NON-PROMOTIONAL PURCHASES WITH DISTINCT CLASIFICACION FROM PROMOTIONAL ARTICLES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (500 rows) => B
+   * PROMOTIONAL PURCHASES (2265 rows) => C
+   * TOTAL PURCHASES (EXCLUDING CLIENTS WHO DIDN’T BOUGHT PROMOS) (3189 rows) => D
+      D = A + B + C
+   * TOTAL PURCHASES (EXCLUDING CLIENTS WHO BOUGHT PROMOS) (647 rows) => E
+   * TOTAL PURCHASES WITH ALL CLIENTS (3836 rows) => F
+      F = D + E
 
 As we can appreciate, all the sets complement each other, so we are not missing data from the created views.
 
